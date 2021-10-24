@@ -1,24 +1,26 @@
 /**
- *  Binary Search Using Only Type Definitions
+ *  Binary Search
  * 
  *  #### Usage
  *      . List of numbers in non-decreasing order
  *      . First index of the list, hence always zero
- *      . Last index of the list
+ *      . Length of the list
  *      . Target number to look for within the list. 
  * 
  */
 
 // EXAMPLES
 
-//                                                                 last  
-// Found                                list of nums          0    index  target
-// // @ts-ignore                  /---------------------\    /-\    /-\    /-\         
-type targetExists = BinarySearch<[1, 3, 5, 6, 6, 7, 9, 10],   0,     7,     5>; // Found at index 2
+//                                                                  list  
+// Found                                list of nums          0     length   target
+// // @ts-ignore                  /---------------------\    /-\     /-\      /-\         
+type targetExists = BinarySearch<[1, 3, 5, 6, 6, 7, 9, 10],   0,      8,       5>; // Found at index 2
 
+
+const nums = [1, 3, 5, 6, 6, 7, 9, 10] as const, target = 4;
 // Not Found
-// @ts-ignore - Suppress infinite loop error
-type targetDoesNotExist = BinarySearch<[1, 3, 5, 7, 9, 10], 0, 5, -5>; // Not found
+// @ts-ignore - suppress infinite loop error
+type targetDoesNotExist = BinarySearch<typeof nums, 0, typeof nums.length, typeof target>; // Not found
 
 
 
@@ -29,6 +31,7 @@ type targetDoesNotExist = BinarySearch<[1, 3, 5, 7, 9, 10], 0, 5, -5>; // Not fo
  * 
  * ==================================================
  */
+
 type ValueAt<
     A extends number[], 
     I extends number
@@ -71,17 +74,17 @@ type DivideByTwo<
 type MiddleIndex<
     L extends number, 
     R extends number
-> = Add<L, DivideByTwo<Subtract<R, L>>>;
+> = Add<L, DivideByTwo<Subtract<R, L>>>
 
 type BinarySearch<
-    Nums extends number[], 
+    Nums extends readonly number[],  
     L extends number, 
     R extends number, 
     T extends number
 > =
-    LTE<L, R> extends false ? [false, -1] // Base case
+    LTE<L, R> extends false ? { found: false, index: -1 } // Base case
     : // @ts-ignore
-    ValueAt<Nums, MiddleIndex<L, R>> extends T ? [true, MiddleIndex<L, R>] // Found
+    ValueAt<Nums, MiddleIndex<L, R>> extends T ? { found: true, index: MiddleIndex<L, R> } // Found
     : // @ts-ignore
     LTE<ValueAt<Nums, MiddleIndex<L, R>>, T> extends true 
     ? // @ts-ignore
@@ -89,4 +92,4 @@ type BinarySearch<
     : // @ts-ignore
     BinarySearch<Nums, L, Subtract<MiddleIndex<L, R>, 1>, T> // Search in left side.
     ;
- 
+    
