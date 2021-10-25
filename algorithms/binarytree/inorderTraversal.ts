@@ -88,13 +88,6 @@ type InOrderTraversal<
 > = 
     NodeIndex extends - 1 
     ? [] 
-    :
-    ValueOf<NodeAt<Tree, NodeIndex>, LeftChild> extends -1 
-    ? 
-    [
-        ValueOf<NodeAt<Tree, NodeIndex>, NodeValue>, 
-        ...InOrderTraversal<Tree, ValueOf<NodeAt<Tree, NodeIndex>, RightChild>, S>
-    ]
     : 
     [
         ...InOrderTraversal<Tree, ValueOf<NodeAt<Tree, NodeIndex>, LeftChild>, S>, 
@@ -102,4 +95,3 @@ type InOrderTraversal<
         ...InOrderTraversal<Tree, ValueOf<NodeAt<Tree, NodeIndex>, RightChild>, S>
     ]
     ;
-  
