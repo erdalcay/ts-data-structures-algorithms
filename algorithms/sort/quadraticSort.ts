@@ -76,11 +76,10 @@ type Slice<
 type SwapNeighbors<
     N extends number[],
     I extends number,
-    J extends number,
+    J extends number
 > = 
     // @ts-ignore
-    [...Slice<N, 0, I>, ValueAt<N, J>, ValueAt<N, I>, ...Slice<N, Add<J, 1>>] 
-
+    [...Slice<N, 0, I>, ValueAt<N, J>, ValueAt<N, I>, ...Slice<N, Add<J, 1>>];
 
 type QuadraticSort<
     N extends readonly number[],
@@ -98,6 +97,5 @@ type QuadraticSort<
     // @ts-ignore
     ? QuadraticSort<N, SwapNeighbors<S, J, Add<J, 1>>, I, Add<J, 1>>
     // @ts-ignore
-    : QuadraticSort<N, S, I, Add<J, 1>>    
-    ;
+    : QuadraticSort<N, S, I, Add<J, 1>>;
   
