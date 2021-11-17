@@ -28,10 +28,7 @@ type targetDoesNotExist = BinarySearch<typeof nums, typeof target>; // Not found
  * 
  * ==================================================
  */
-
-// 8; [0,0,0,0,1,0,0,0]
-// 16; [0,0,0,1,0,0,0,0]
-
+                                       
 type ValueAt<
     A extends number[], 
     I extends number
