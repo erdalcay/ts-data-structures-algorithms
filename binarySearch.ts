@@ -61,7 +61,7 @@ type ValueAt<
 type MiddleIndex<
     L extends number, 
     R extends number
-> = Add<L, DivideByTwo<Subtract<R, L>>>
+> = Add<L, DivideByTwo<Subtract<R, L>>>;
 
 type BinarySearch<
     Nums extends number[],  
