@@ -1,24 +1,14 @@
-/**
- *  Binary Search
- * 
- *  #### Usage
- *      . Create an array of numbers in non-decreasing order.
- *      . Pass in a target number to look for within the array. 
- */
+// Binary Search Using Only Type Definitions
 
-// EXAMPLES
-
-//                                                                  
-// Found                                list of nums      target
+// Examples
+//                                ordered list of numbers
+// Found                           /-------------------\  target
 // // @ts-ignore                  /---------------------\  /-\         
 type targetExists = BinarySearch<[1, 3, 5, 6, 6, 7, 9, 10], 5>; // Found at index 2
 
-
-const nums = [1, 3, 5, 6, 6, 7, 9, 10] as const, target = 4;
 // Not Found
-// @ts-ignore - suppress infinite loop error
-type targetDoesNotExist = BinarySearch<typeof nums, typeof target>; // Not found
-
+// @ts-ignore - Suppress infinite loop error
+type targetDoesNotExist = BinarySearch<[1, 3, 5, 7, 9, 10], -5>;
 
 
 /**
@@ -28,14 +18,6 @@ type targetDoesNotExist = BinarySearch<typeof nums, typeof target>; // Not found
  * 
  * ==================================================
  */
-                                       
-type ValueAt<
-    A extends number[], 
-    I extends number
-> = A[I];
-
-type Equal<A, B> = 
-    A extends B ? B extends A ? true : false : false;
 
 type Length<
     A extends number, 
@@ -50,16 +32,9 @@ type Add<
 type Subtract<
     A extends number, 
     B extends number
-> = Length<A> extends [...(infer D), ...Length<B>] 
-    ? D['length'] 
+> = Length<A> extends [...(infer Delta), ...Length<B>] 
+    ? Delta['length'] 
     : -1;
-
-type LTE<
-    A extends number, 
-    B extends number
-> = Equal<A, B> extends true 
-    ? true 
-    : Subtract<A, B> extends -1 ? true : false;
 
 type DivideByTwo<
     A extends number, 
@@ -68,16 +43,31 @@ type DivideByTwo<
     ? R['length'] 
     : DivideByTwo<Subtract<A, 2>, [0, ...R]>;
 
+type Equal<A, B> = 
+    A extends B ? B extends A ? true : false : false;
+
+type LTE<
+    A extends number, 
+    B extends number
+> = Equal<A, B> extends true 
+    ? true 
+    : Subtract<A, B> extends -1 ? true : false;
+
+type ValueAt<
+    A extends number[], 
+    I extends number
+> = A[I];
+
 type MiddleIndex<
     L extends number, 
     R extends number
-> = Add<L, DivideByTwo<Subtract<R, L>>>;
+> = Add<L, DivideByTwo<Subtract<R, L>>>
 
 type BinarySearch<
-    Nums extends readonly number[],  
+    Nums extends number[],  
     T extends number,
     L extends number = 0, 
-    R extends number = Nums['length'], 
+    R extends number = Nums['length'],
 > =
     LTE<L, R> extends false ? { found: false, index: -1 } // Base case
     : // @ts-ignore
@@ -85,9 +75,7 @@ type BinarySearch<
     : // @ts-ignore
     LTE<ValueAt<Nums, MiddleIndex<L, R>>, T> extends true 
     ? // @ts-ignore
-    BinarySearch<Nums, T, Add<MiddleIndex<L, R>, 1>, R> // Search in right side.
+    BinarySearch<Nums, T, Add<MiddleIndex<L, R>, 1>, R> // Search on the right side.
     : // @ts-ignore
-    BinarySearch<Nums, T, L, Subtract<MiddleIndex<L, R>, 1>> // Search in left side.
+    BinarySearch<Nums, T, L, Subtract<MiddleIndex<L, R>, 1>> // Search on the left side.
     ;
-    
-
